@@ -1,0 +1,576 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <link rel="manifest" href="manifest.json">
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Personal Finance Tracker - Autenticación Premium</title>
+    
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        :root {
+            --bg-global: #f8fafc;
+            --surface: #ffffff;
+            --text-main: #0f172a;
+            --text-muted: #64748b;
+            --primary: #2563eb;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --border: #e2e8f0;
+            --radius: 16px;
+        }
+
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-global);
+            margin: 0;
+            padding: 0;
+            color: var(--text-main);
+        }
+
+        /* PANTALLA DE ACCESO (LOGIN) */
+        .auth-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background-color: #0f172a;
+        }
+
+        .auth-card {
+            background: var(--surface);
+            padding: 35px;
+            border-radius: var(--radius);
+            width: 100%;
+            max-width: 380px;
+            box-shadow: 0 10px 25px -5px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .auth-card h2 { margin: 0 0 8px 0; font-size: 1.5rem; }
+        .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin: 0 0 24px 0; }
+
+        /* INTERFAZ PRINCIPAL (DASHBOARD) - OCULTA INICIALMENTE */
+        .dashboard-layout-root {
+            display: none; 
+        }
+
+        .navbar {
+            background-color: #1e293b;
+            color: #ffffff;
+            padding: 16px 24px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .navbar-brand { font-size: 1.1rem; font-weight: 600; display: flex; align-items: center; gap: 10px; }
+        .user-profile { display: flex; align-items: center; gap: 12px; font-size: 0.9rem; }
+        
+        .btn-logout {
+            background: none; border: 1px solid #475569; color: #94a3b8; 
+            padding: 4px 10px; border-radius: 6px; cursor: pointer; font-size: 0.75rem;
+        }
+        .btn-logout:hover { background: #334155; color: #fff; }
+
+        .main-content { max-width: 1300px; margin: 30px auto; padding: 0 20px; }
+
+        /* KPIs Clickeables */
+        .kpi-row {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .kpi-card {
+            background: var(--surface); padding: 20px; border-radius: var(--radius);
+            border: 1px solid var(--border); display: flex; align-items: center;
+            justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
+            transition: all 0.2s ease;
+        }
+        
+        .kpi-card.interactive { cursor: pointer; }
+        .kpi-card.interactive:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
+
+        .kpi-data h4 { margin: 0; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
+        .kpi-data p { margin: 6px 0 0 0; font-size: 1.7rem; font-weight: 700; }
+        .kpi-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .balance .kpi-icon { background-color: #ecfdf5; color: var(--success); }
+        .incomes .kpi-icon { background-color: #eff6ff; color: var(--primary); }
+        .expenses .kpi-icon { background-color: #fff7ed; color: var(--warning); }
+        .savings .kpi-icon { background-color: #f5f3ff; color: #8b5cf6; }
+
+        /* Categorías */
+        .categories-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(130px, 1fr)); gap: 16px; margin-bottom: 30px; }
+        .category-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
+        .category-box:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1); }
+        .category-box i { font-size: 1.8rem; margin-bottom: 12px; display: block; }
+        .category-box span { font-size: 0.9rem; font-weight: 600; color: #334155; }
+
+        /* Panels Desplegables */
+        .action-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 30px; display: none; animation: fadeIn 0.3s ease; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+
+        input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background-color: #f8fafc; box-sizing: border-box; font-size: 0.95rem; }
+        input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff; }
+        label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
+
+        .btn { padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; color: white; width: 100%; }
+
+        /* Gráficos e Historial */
+        .bottom-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
+        @media (min-width: 950px) { .bottom-grid { grid-template-columns: 1fr 420px; } }
+        .card { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
+        
+        .budget-bar-box { margin-bottom: 16px; background: #f8fafc; padding: 14px; border-radius: 10px; border: 1px solid var(--border); }
+        .bar-bg { background-color: #e2e8f0; height: 8px; border-radius: 999px; overflow: hidden; margin-top: 6px; }
+        .bar-fill { height: 100%; width: 0%; transition: width 0.4s ease; }
+
+        table { width: 100%; border-collapse: collapse; }
+        th, td { padding: 12px; font-size: 0.85rem; text-align: left; border-bottom: 1px solid #f1f5f9; }
+        th { color: var(--text-muted); font-weight: 600; background-color: #f8fafc; }
+        .badge { padding: 3px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+        .badge-g { background-color: #fee2e2; color: var(--danger); }
+        .badge-i { background-color: #d1fae5; color: var(--success); }
+    </style>
+</head>
+<body>
+
+    <div id="auth-screen" class="auth-container">
+        <div class="auth-card">
+            <i class="fa-solid fa-vault" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;"></i>
+            <h2 id="auth-title">Iniciar Sesión</h2>
+            <p id="auth-desc">Introduce tus credenciales para ingresar a tu wallet</p>
+            
+            <div id="reg-fields" style="display: none; text-align: left; margin-bottom: 16px;">
+                <label>Nombre Completo</label>
+                <input type="text" id="auth-name" placeholder="Tu nombre">
+                <label style="margin-top: 12px;">Día de Pago Mensual (1-28)</label>
+                <input type="number" id="auth-ciclo" min="1" max="28" value="1">
+            </div>
+
+            <div style="text-align: left; margin-bottom: 16px;">
+                <label>Correo Electrónico</label>
+                <input type="email" id="auth-email" placeholder="ejemplo@correo.com">
+            </div>
+            <div style="text-align: left; margin-bottom: 24px;">
+                <label>Contraseña</label>
+                <input type="password" id="auth-password" placeholder="••••">
+            </div>
+            
+            <button onclick="procesarAuth()" id="btn-auth-main" class="btn" style="background-color: var(--primary); margin-bottom: 14px;">Ingresar de Forma Segura</button>
+            <a href="#" id="auth-toggle" onclick="conmutarModoAuth()" style="font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 600;">¿No tienes cuenta? Regístrate aquí</a>
+        </div>
+    </div>
+
+    <div id="dashboard-screen" class="dashboard-layout-root">
+        <div class="navbar">
+            <div class="navbar-brand"><i class="fa-solid fa-wallet" style="color: var(--primary);"></i> <span>Personal Finance Tracker Premium</span></div>
+            <div class="user-profile">
+                <span id="user-display-name" style="font-weight: 600; color: #cbd5e1;">Cargando...</span>
+                <button onclick="logout()" class="btn-logout">Salir <i class="fa-solid fa-sign-out-alt"></i></button>
+            </div>
+        </div>
+
+        <div class="main-content">
+            <div class="kpi-row">
+                <div class="kpi-card balance"><div class="kpi-data"><h4>Balance Neto</h4><p id="net-balance">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-scale-balanced"></i></div></div>
+                <div class="kpi-card incomes interactive" onclick="abrirPanelIngreso()"><div class="kpi-data"><h4>Ingresos (Añadir +)</h4><p id="total-incomes">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-arrow-trend-up"></i></div></div>
+                <div class="kpi-card expenses interactive" onclick="abrirPanelGastosPastel()"><div class="kpi-data"><h4>Gastos (Ver Gráfico)</h4><p id="total-expenses">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-arrow-trend-down"></i></div></div>
+                <div class="kpi-card savings"><div class="kpi-data"><h4>Ahorro Acumulado</h4><p id="total-savings">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-piggy-bank"></i></div></div>
+            </div>
+
+            <div id="panel-ingreso-global" class="action-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-money-bill-trend-up" style="color: var(--success); margin-right: 10px;"></i> Inyectar Ingreso Global</h3>
+                    <i class="fa-solid fa-xmark" onclick="cerrarPanelIngreso()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
+                </div>
+                <div class="form-row" style="max-width: 400px;">
+                    <div><label>Monto del Ingreso ($)</label><input type="number" id="global-income-amt" placeholder="0.00"></div>
+                </div>
+                <button onclick="ejecutarIngresoGlobal()" class="btn" style="background-color: var(--primary); max-width: 400px;">Confirmar Ingreso</button>
+            </div>
+
+            <div id="panel-gastos-pastel" class="action-panel">
+                <div class="panel-header">
+                    <h3><i class="fa-solid fa-chart-pie" style="color: var(--danger); margin-right: 10px;"></i> Distribución Porcentual de tus Gastos</h3>
+                    <i class="fa-solid fa-xmark" onclick="cerrarPanelGastosPastel()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
+                </div>
+                <div style="max-width: 340px; margin: 0 auto; position: relative; height: 340px;">
+                    <canvas id="pieChart"></canvas>
+                </div>
+            </div>
+
+            <h3 style="margin-bottom: 15px; font-weight: 600;"><i class="fa-solid fa-layer-group" style="color: var(--primary); margin-right: 8px;"></i> Gestionar Categorías de Gasto</h3>
+
+            <div class="categories-grid">
+                <div class="category-box" onclick="abrirPanel('alimentacion', 'fa-utensils', '#ef4444')"><i class="fa-solid fa-utensils" style="color: #ef4444;"></i><span>Alimentación</span></div>
+                <div class="category-box" onclick="abrirPanel('transporte', 'fa-car', '#3b82f6')"><i class="fa-solid fa-car" style="color: #3b82f6;"></i><span>Transporte</span></div>
+                <div class="category-box" onclick="abrirPanel('entretenimiento', 'fa-gamepad', '#f59e0b')"><i class="fa-solid fa-gamepad" style="color: #f59e0b;"></i><span>Entretenimiento</span></div>
+                <div class="category-box" onclick="abrirPanel('vivienda', 'fa-house', '#10b981')"><i class="fa-solid fa-house" style="color: #10b981;"></i><span>Vivienda</span></div>
+                <div class="category-box" onclick="abrirPanel('salud', 'fa-heart-pulse', '#ec4899')"><i class="fa-solid fa-heart-pulse" style="color: #ec4899;"></i><span>Salud</span></div>
+                <div class="category-box" onclick="abrirPanel('educacion', 'fa-graduation-cap', '#8b5cf6')"><i class="fa-solid fa-graduation-cap" style="color: #8b5cf6;"></i><span>Educación</span></div>
+                <div class="category-box" onclick="abrirPanel('otros', 'fa-ellipsis-h', '#64748b')"><i class="fa-solid fa-ellipsis-h" style="color: #64748b;"></i><span>Otros</span></div>
+            </div>
+
+            <div id="panel-operacion" class="action-panel">
+                <div class="panel-header">
+                    <h3 id="panel-title">Operación</h3>
+                    <i class="fa-solid fa-xmark" onclick="cerrarPanel()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
+                </div>
+                <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
+                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
+                        <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
+                            <h5 style="margin: 0 0 12px 0; font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Registrar Gasto</h5>
+                            <div class="form-row">
+                                <div><label>Monto ($)</label><input type="number" id="t-amt" placeholder="0.00"></div>
+                            </div>
+                            <button onclick="ejecutarGasto()" class="btn" style="background-color: var(--danger);">Confirmar Gasto</button>
+                            <div id="alerta-toast" style="padding:10px; background:#fffbeb; border-left:4px solid var(--warning); color:#78350f; border-radius:6px; font-size:0.85rem; margin-top:12px; display:none;"></div>
+                        </div>
+                        <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
+                            <h5 style="margin: 0 0 12px 0; font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Asignar Límite Máximo</h5>
+                            <div style="margin-bottom: 16px;"><label>Nuevo Presupuesto ($)</label><input type="number" id="b-amt" placeholder="0.00"></div>
+                            <button onclick="ejecutarPresupuesto()" class="btn" style="background-color: var(--primary);">Fijar Límite</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-grid">
+                <div class="card">
+                    <h3 style="margin:0 0 15px 0;"><i class="fa-solid fa-chart-bar" style="color:var(--primary); margin-right:8px;"></i> Comparativa Mensual</h3>
+                    <div style="position: relative; height: 260px;"><canvas id="analyticsChart"></canvas></div>
+                </div>
+                <div class="right-block">
+                    <div class="card" style="margin-bottom: 20px;">
+                        <h3 style="margin:0 0 15px 0;"><i class="fa-solid fa-bullseye" style="color:var(--warning); margin-right:8px;"></i> Presupuestos Activos</h3>
+                        <div id="container-presupuestos"></div>
+                    </div>
+                    <div class="card">
+                        <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
+                            <h3 style="margin:0;"><i class="fa-solid fa-history" style="color:var(--text-muted); margin-right:8px;"></i> Historial</h3>
+                            <button onclick="reiniciarApp()" style="background:none; border:1px solid #fee2e2; color:var(--danger); padding:4px 8px; border-radius:6px; cursor:pointer; font-size:0.75rem;">Limpiar</button>
+                        </div>
+                        <table>
+                            <thead><tr><th>Tipo</th><th>Categoría</th><th>Monto</th></tr></thead>
+                            <tbody id="container-historial"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const API_URL = "https://mi-api-finanzas.onrender.com";
+        let myChart = null;
+        let pieChart = null;
+        let categoriaSeleccionada = "";
+        let modoLogin = true;
+
+        window.onload = function() {
+            const token = localStorage.getItem("token");
+            const nombre = localStorage.getItem("nombre");
+            if(token && nombre) {
+                mostrarDashboard(nombre);
+            }
+        };
+
+        function conmutarModoAuth() {
+            modoLogin = !modoLogin;
+            document.getElementById('auth-title').innerText = modoLogin ? "Iniciar Sesión" : "Crear Cuenta Nueva";
+            document.getElementById('auth-desc').innerText = modoLogin ? "Introduce tus credenciales para ingresar a tu wallet" : "Regístrate para automatizar tus ciclos de cierre y ahorros";
+            document.getElementById('btn-auth-main').innerText = modoLogin ? "Ingresar de Forma Segura" : "Registrar Cuenta";
+            document.getElementById('auth-toggle').innerText = modoLogin ? "¿No tienes cuenta? Regístrate aquí" : "¿Ya tienes cuenta? Inicia sesión";
+            document.getElementById('reg-fields').style.display = modoLogin ? "none" : "block";
+        }
+
+        async function procesarAuth() {
+            const correoInput = document.getElementById('auth-email').value;
+            const contrasenaInput = document.getElementById('auth-password').value;
+            
+            if(!correoInput || !contrasenaInput) return alert("Por favor, llena los campos básicos.");
+
+            if(modoLogin) {
+                // MODO LOGIN
+                try {
+                    const res = await fetch(`${API_URL}/auth/login`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ email: correoInput, password: contrasenaInput })
+                    });
+                    const datos = await res.json();
+
+                    if(!res.ok) {
+                        alert(datos.detail || "Error en el inicio de sesión.");
+                        return;
+                    }
+
+                    localStorage.setItem("token", datos.access_token);
+                    localStorage.setItem("nombre", datos.nombre);
+                    mostrarDashboard(datos.nombre);
+                } catch (err) {
+                    alert("Error de conexión con el servidor.");
+                }
+            } else {
+                // MODO REGISTRO
+                const nombreInput = document.getElementById('auth-name').value;
+                const cicloInput = document.getElementById('auth-ciclo').value;
+                if(!nombreInput) return alert("Por favor introduce tu nombre.");
+
+                try {
+                    const res = await fetch(`${API_URL}/auth/registrar`, {
+                        method: 'POST',
+                        headers: {'Content-Type': 'application/json'},
+                        body: JSON.stringify({ 
+                            nombre: nombreInput, 
+                            email: correoInput, 
+                            password: contrasenaInput,
+                            ciclo_inicio_dia: parseInt(cicloInput) 
+                        })
+                    });
+                    const datos = await res.json();
+
+                    if(!res.ok) {
+                        alert(datos.detail || "Error al registrar la cuenta.");
+                        return;
+                    }
+
+                    alert(datos.mensaje || "Cuenta creada con éxito.");
+                    conmutarModoAuth();
+                } catch (err) {
+                    alert("Error de conexión al registrar.");
+                }
+            }
+        }
+
+        function mostrarDashboard(nombre) {
+            document.getElementById('auth-screen').style.display = "none";
+            document.getElementById('dashboard-screen').style.display = "block";
+            document.getElementById('user-display-name').innerText = nombre;
+            refrescarDashboard();
+        }
+
+        function logout() {
+            localStorage.clear();
+            location.reload();
+        }
+
+        // CONTROL DE PANELES EXTRA
+        function abrirPanelIngreso() {
+            cerrarPanel();
+            cerrarPanelGastosPastel();
+            document.getElementById('panel-ingreso-global').style.display = "block";
+        }
+        function cerrarPanelIngreso() { document.getElementById('panel-ingreso-global').style.display = "none"; }
+
+        function abrirPanelGastosPastel() {
+            cerrarPanel();
+            cerrarPanelIngreso();
+            document.getElementById('panel-gastos-pastel').style.display = "block";
+            cargarGraficoPastel();
+        }
+        function cerrarPanelGastosPastel() { document.getElementById('panel-gastos-pastel').style.display = "none"; }
+
+        function abrirPanel(cat, icono, color) {
+            cerrarPanelIngreso();
+            cerrarPanelGastosPastel();
+            categoriaSeleccionada = cat;
+            document.getElementById('panel-title').innerHTML = `<i class="fa-solid ${icono}" style="color: ${color}; margin-right: 10px;"></i> Operar Categoría: <span style="text-transform:uppercase; color:${color}; font-weight:700;">${cat}</span>`;
+            document.getElementById('panel-operacion').style.display = "block";
+            document.getElementById('alerta-toast').style.display = "none";
+            document.getElementById('panel-operacion').scrollIntoView({ behavior: 'smooth' });
+        }
+        function cerrarPanel() { document.getElementById('panel-operacion').style.display = "none"; categoriaSeleccionada = ""; }
+
+        function initChart(labels = [], dataGasto = [], dataLimite = []) {
+            const ctx = document.getElementById('analyticsChart').getContext('2d');
+            if(myChart) myChart.destroy();
+            myChart = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        { label: 'Consumido ($)', data: dataGasto, backgroundColor: '#ef4444', borderRadius: 6 },
+                        { label: 'Límite ($)', data: dataLimite, backgroundColor: '#3b82f6', borderRadius: 6 }
+                    ]
+                },
+                options: { responsive: true, maintainAspectRatio: false, scales: { y: { beginAtZero: true } } }
+            });
+        }
+
+        // GRÁFICO DE PASTEL CONECTADO AL ENDPOINT
+        async function cargarGraficoPastel() {
+            const token = localStorage.getItem("token");
+            try {
+                const res = await fetch(`${API_URL}/graficos/pastel/?token=${token}`);
+                const datos = await res.json();
+                
+                const labels = Object.keys(datos);
+                const valores = Object.values(datos);
+
+                const ctx = document.getElementById('pieChart').getContext('2d');
+                if(pieChart) pieChart.destroy();
+
+                if(valores.reduce((a, b) => a + b, 0) === 0) {
+                    ctx.clearRect(0,0,340,340);
+                    alert("Aún no tienes gastos registrados en este ciclo para graficar.");
+                    cerrarPanelGastosPastel();
+                    return;
+                }
+
+                pieChart = new Chart(ctx, {
+                    type: 'pie',
+                    data: {
+                        labels: labels.map(l => l.toUpperCase()),
+                        datasets: [{
+                            data: valores,
+                            backgroundColor: ['#ef4444', '#3b82f6', '#f59e0b', '#10b981', '#ec4899', '#8b5cf6', '#64748b']
+                        }]
+                    },
+                    options: { responsive: true, maintainAspectRatio: false }
+                });
+            } catch(e) {
+                console.log("No se pudo estructurar el gráfico.");
+            }
+        }
+
+        async function refrescarDashboard() {
+            const token = localStorage.getItem("token");
+            if(!token) return;
+
+            try {
+                const resB = await fetch(`${API_URL}/presupuestos/?token=${token}`);
+                const presupuestos = await resB.json();
+                const resT = await fetch(`${API_URL}/transacciones/?token=${token}`);
+                const transacciones = await resT.json();
+
+                let tIngresos = 0, tGastos = 0, tAhorros = 0;
+                transacciones.forEach(t => { 
+                    if(t.tipo === 'ingreso') tIngresos += t.monto; 
+                    else if(t.tipo === 'ahorro') tAhorros += t.monto;
+                    else tGastos += t.monto; 
+                });
+
+                document.getElementById('total-incomes').innerText = `$${tIngresos.toFixed(2)}`;
+                document.getElementById('total-expenses').innerText = `$${tGastos.toFixed(2)}`;
+                document.getElementById('total-savings').innerText = `$${tAhorros.toFixed(2)}`;
+                
+                const net = tIngresos - tGastos;
+                document.getElementById('net-balance').innerText = `$${net.toFixed(2)}`;
+                document.getElementById('net-balance').style.color = net >= 0 ? "var(--success)" : "var(--danger)";
+
+                const contenedorB = document.getElementById('container-presupuestos');
+                contenedorB.innerHTML = "";
+                let cLabels = [], cGastos = [], cLimites = [];
+
+                if (Object.keys(presupuestos).length === 0) {
+                    contenedorB.innerHTML = `<p style="color:var(--text-muted); font-size:0.85rem; margin:0;">No hay presupuestos activos.</p>`;
+                } else {
+                    for (const [cat, info] of Object.entries(presupuestos)) {
+                        const pct = parseFloat(info.porcentaje);
+                        let color = "var(--success)";
+                        if(pct >= 100) color = "var(--danger)";
+                        else if(pct >= 80) color = "var(--warning)";
+
+                        contenedorB.innerHTML += `
+                            <div class="budget-bar-box">
+                                <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600;">
+                                    <span style="text-transform:capitalize;">${cat}</span>
+                                    <span>$${info.consumido.toFixed(0)} / $${info.limite.toFixed(0)}</span>
+                                </div>
+                                <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(pct, 100)}%; background-color:${color}"></div></div>
+                            </div>
+                        `;
+                        cLabels.push(cat.toUpperCase()); cGastos.push(info.consumido); cLimites.push(info.limite);
+                    }
+                }
+                initChart(cLabels, cGastos, cLimites);
+
+                const contenedorT = document.getElementById('container-historial');
+                contenedorT.innerHTML = "";
+                const filtradas = transacciones.filter(t => t.tipo !== 'ahorro');
+                if(filtradas.length === 0) {
+                    contenedorT.innerHTML = `<tr><td colspan="3" style="text-align:center; color:var(--text-muted);">Sin movimientos.</td></tr>`;
+                    return;
+                }
+                filtradas.slice(-4).reverse().forEach(t => {
+                    contenedorT.innerHTML += `<tr><td><span class="badge ${t.tipo==='gasto'?'badge-g':'badge-i'}">${t.tipo.toUpperCase()}</span></td><td style="text-transform:capitalize;">${t.categoria || 'Global'}</td><td><strong>$${t.monto.toFixed(2)}</strong></td></tr>`;
+                });
+            } catch (e) {
+                console.log("Cargando datos...");
+            }
+        }
+
+        // ACCIÓN DE INGRESO CENTRALIZADO
+        async function ejecutarIngresoGlobal() {
+            const token = localStorage.getItem("token");
+            const monto = document.getElementById('global-income-amt').value;
+            if(!monto || parseFloat(monto) <= 0) return alert("Ingresa un monto válido para tu ingreso.");
+
+            await fetch(`${API_URL}/transacciones/?token=${token}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ tipo: 'ingreso', categoria: 'global', monto: parseFloat(monto) })
+            });
+            document.getElementById('global-income-amt').value = '';
+            cerrarPanelIngreso();
+            refrescarDashboard();
+        }
+
+        // ACCIÓN DE GASTO POR CATEGORÍA
+        async function ejecutarGasto() {
+            const token = localStorage.getItem("token");
+            const monto = document.getElementById('t-amt').value;
+            const toast = document.getElementById('alerta-toast');
+            if(!monto || !categoriaSeleccionada) return alert("Ingresa un monto de gasto válido.");
+
+            const res = await fetch(`${API_URL}/transacciones/?token=${token}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ tipo: 'gasto', categoria: categoriaSeleccionada, monto: parseFloat(monto) })
+            });
+            const data = await res.json();
+            
+            if(data.notificacion) {
+                toast.style.display = "block";
+                toast.innerText = data.notificacion;
+            } else {
+                toast.style.display = "none";
+            }
+            document.getElementById('t-amt').value = '';
+            refrescarDashboard();
+        }
+
+        async function ejecutarPresupuesto() {
+            const token = localStorage.getItem("token");
+            const limite = document.getElementById('b-amt').value;
+            if(!limite || !categoriaSeleccionada) return alert("Ingresa un límite válido");
+
+            await fetch(`${API_URL}/presupuestos/?token=${token}`, {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({ categoria: categoriaSeleccionada, limite_maximo: parseFloat(limite) })
+            });
+            document.getElementById('b-amt').value = '';
+            alert(`Límite para ${categoriaSeleccionada} fijado correctamente.`);
+            refrescarDashboard();
+        }
+
+        async function reiniciarApp() {
+            const token = localStorage.getItem("token");
+            if(!confirm("¿Vaciar tus registros personales?")) return;
+            await fetch(`${API_URL}/reiniciar/?token=${token}`, { method: 'POST' });
+            cerrarPanel();
+            refrescarDashboard();
+        }
+    </script>
+</body>
+</html>
