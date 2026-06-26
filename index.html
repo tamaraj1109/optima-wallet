@@ -78,7 +78,7 @@
 
         .main-content { max-width: 1300px; margin: 30px auto; padding: 0 20px; }
 
-        /* KPIs Clickeables */
+        /* KPIs Clickeables - TIPOGRAFÍA MÁS GRANDE Y LLAMATIVA */
         .kpi-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -87,7 +87,7 @@
         }
 
         .kpi-card {
-            background: var(--surface); padding: 20px; border-radius: var(--radius);
+            background: var(--surface); padding: 22px; border-radius: var(--radius);
             border: 1px solid var(--border); display: flex; align-items: center;
             justify-content: space-between; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.02);
             transition: all 0.2s ease;
@@ -96,9 +96,9 @@
         .kpi-card.interactive { cursor: pointer; }
         .kpi-card.interactive:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
 
-        .kpi-data h4 { margin: 0; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; }
-        .kpi-data p { margin: 6px 0 0 0; font-size: 1.7rem; font-weight: 700; }
-        .kpi-icon { width: 44px; height: 44px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.2rem; }
+        .kpi-data h4 { margin: 0; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
+        .kpi-data p { margin: 6px 0 0 0; font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; } /* Corregido tracking-width por letter-spacing */
+        .kpi-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
         .balance .kpi-icon { background-color: #ecfdf5; color: var(--success); }
         .incomes .kpi-icon { background-color: #eff6ff; color: var(--primary); }
         .expenses .kpi-icon { background-color: #fff7ed; color: var(--warning); }
@@ -109,7 +109,36 @@
         .category-box { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 20px; text-align: center; cursor: pointer; transition: all 0.2s ease; }
         .category-box:hover { transform: translateY(-3px); border-color: var(--primary); box-shadow: 0 10px 15px -3px rgba(37, 99, 235, 0.1); }
         .category-box i { font-size: 1.8rem; margin-bottom: 12px; display: block; }
-        .category-box span { font-size: 0.9rem; font-weight: 600; color: #334155; }
+        .category-box span { font-size: 0.9rem; font-weight: 700; color: #334155; }
+
+        /* Opciones de Radio de Ingresos Premium */
+        .income-type-selector {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+            margin-bottom: 18px;
+        }
+        .income-radio-label {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px;
+            background: #f8fafc;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 0.9rem;
+            font-weight: 600;
+            transition: all 0.15s;
+        }
+        .income-radio-label:hover {
+            border-color: var(--success);
+            background: #f0fdf4;
+        }
+        .income-radio-label input {
+            width: auto;
+            margin: 0;
+        }
 
         /* Panels Desplegables */
         .action-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 30px; display: none; animation: fadeIn 0.3s ease; }
@@ -119,9 +148,36 @@
 
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background-color: #f8fafc; box-sizing: border-box; font-size: 0.95rem; }
         input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff; }
-        label { display: block; font-size: 0.75rem; font-weight: 600; color: var(--text-muted); margin-bottom: 4px; text-transform: uppercase; }
+        label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
 
-        .btn { padding: 12px 20px; border: none; border-radius: 10px; font-weight: 600; cursor: pointer; color: white; width: 100%; }
+        .btn { padding: 12px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; color: white; width: 100%; font-size: 0.95rem; }
+
+        /* Gráficos con Tabla Resumen a los lados */
+        .chart-layout-box {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            align-items: center;
+        }
+        @media(min-width: 600px) {
+            .chart-layout-box {
+                flex-direction: row;
+                justify-content: space-around;
+            }
+        }
+        .chart-summary-table {
+            width: 100%;
+            max-width: 240px;
+            border-collapse: collapse;
+        }
+        .chart-summary-table tr {
+            border-bottom: 1px solid #f1f5f9;
+        }
+        .chart-summary-table td {
+            padding: 8px 4px;
+            font-size: 0.85rem;
+            font-weight: 600;
+        }
 
         /* Gráficos e Historial */
         .bottom-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
@@ -134,8 +190,8 @@
 
         table { width: 100%; border-collapse: collapse; }
         th, td { padding: 12px; font-size: 0.85rem; text-align: left; border-bottom: 1px solid #f1f5f9; }
-        th { color: var(--text-muted); font-weight: 600; background-color: #f8fafc; }
-        .badge { padding: 3px 6px; border-radius: 4px; font-size: 0.7rem; font-weight: 700; }
+        th { color: var(--text-muted); font-weight: 700; background-color: #f8fafc; text-transform: uppercase; font-size: 0.75rem; }
+        .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; }
         .badge-g { background-color: #fee2e2; color: var(--danger); }
         .badge-i { background-color: #d1fae5; color: var(--success); }
     </style>
@@ -145,14 +201,18 @@
     <div id="auth-screen" class="auth-container">
         <div class="auth-card">
             <i class="fa-solid fa-vault" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 15px;"></i>
-            <h2 id="auth-title">Iniciar Sesión</h2>
+            <h2 id="auth-title" style="font-weight: 800;">Iniciar Sesión</h2>
             <p id="auth-desc">Introduce tus credenciales para ingresar a tu wallet</p>
             
             <div id="reg-fields" style="display: none; text-align: left; margin-bottom: 16px;">
-                <label>Nombre Completo</label>
-                <input type="text" id="auth-name" placeholder="Tu nombre">
-                <label style="margin-top: 12px;">Día de Pago Mensual (1-28)</label>
-                <input type="number" id="auth-ciclo" min="1" max="28" value="1">
+                <div style="margin-bottom: 12px;">
+                    <label>Nombre Completo</label>
+                    <input type="text" id="auth-name" placeholder="Tu nombre">
+                </div>
+                <div>
+                    <label>Día de Pago Mensual (1-31)</label>
+                    <input type="number" id="auth-ciclo" min="1" max="31" value="1">
+                </div>
             </div>
 
             <div style="text-align: left; margin-bottom: 16px;">
@@ -165,15 +225,15 @@
             </div>
             
             <button onclick="procesarAuth()" id="btn-auth-main" class="btn" style="background-color: var(--primary); margin-bottom: 14px;">Ingresar de Forma Segura</button>
-            <a href="#" id="auth-toggle" onclick="conmutarModoAuth()" style="font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 600;">¿No tienes cuenta? Regístrate aquí</a>
+            <a href="#" id="auth-toggle" onclick="conmutarModoAuth()" style="font-size: 0.8rem; color: var(--primary); text-decoration: none; font-weight: 700;">¿No tienes cuenta? Regístrate aquí</a>
         </div>
     </div>
 
     <div id="dashboard-screen" class="dashboard-layout-root">
         <div class="navbar">
-            <div class="navbar-brand"><i class="fa-solid fa-wallet" style="color: var(--primary);"></i> <span>Personal Finance Tracker Premium</span></div>
+            <div class="navbar-brand"><i class="fa-solid fa-wallet" style="color: var(--primary);"></i> <span style="font-weight: 800;">Personal Finance Tracker Premium</span></div>
             <div class="user-profile">
-                <span id="user-display-name" style="font-weight: 600; color: #cbd5e1;">Cargando...</span>
+                <span id="user-display-name" style="font-weight: 800; color: #cbd5e1; font-size: 1rem;">Cargando...</span>
                 <button onclick="logout()" class="btn-logout">Salir <i class="fa-solid fa-sign-out-alt"></i></button>
             </div>
         </div>
@@ -181,33 +241,65 @@
         <div class="main-content">
             <div class="kpi-row">
                 <div class="kpi-card balance"><div class="kpi-data"><h4>Balance Neto</h4><p id="net-balance">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-scale-balanced"></i></div></div>
-                <div class="kpi-card incomes interactive" onclick="abrirPanelIngreso()"><div class="kpi-data"><h4>Ingresos (Añadir +)</h4><p id="total-incomes">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-arrow-trend-up"></i></div></div>
-                <div class="kpi-card expenses interactive" onclick="abrirPanelGastosPastel()"><div class="kpi-data"><h4>Gastos (Ver Gráfico)</h4><p id="total-expenses">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-arrow-trend-down"></i></div></div>
-                <div class="kpi-card savings"><div class="kpi-data"><h4>Ahorro Acumulado</h4><p id="total-savings">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-piggy-bank"></i></div></div>
+                <div class="kpi-card incomes interactive" onclick="abrirPanelIngreso()"><div class="kpi-data"><h4>Ingresos (Añadir +)</h4><p id="total-incomes" style="color: var(--primary);">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-arrow-trend-up"></i></div></div>
+                <div class="kpi-card expenses interactive" onclick="abrirPanelGastosPastel()"><div class="kpi-data"><h4>Gastos (Ver Gráfico)</h4><p id="total-expenses" style="color: var(--warning);">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-arrow-trend-down"></i></div></div>
+                <div class="kpi-card savings"><div class="kpi-data"><h4>Ahorro Acumulado</h4><p id="total-savings" style="color: #8b5cf6;">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-piggy-bank"></i></div></div>
             </div>
 
+            <!-- MODAL / PANEL DE INGRESO CON CATEGORÍAS ADICIONADAS -->
             <div id="panel-ingreso-global" class="action-panel">
                 <div class="panel-header">
-                    <h3><i class="fa-solid fa-money-bill-trend-up" style="color: var(--success); margin-right: 10px;"></i> Inyectar Ingreso Global</h3>
+                    <h3><i class="fa-solid fa-money-bill-trend-up" style="color: var(--success); margin-right: 10px;"></i> Inyectar Flujo de Ingreso</h3>
                     <i class="fa-solid fa-xmark" onclick="cerrarPanelIngreso()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
                 </div>
-                <div class="form-row" style="max-width: 400px;">
-                    <div><label>Monto del Ingreso ($)</label><input type="number" id="global-income-amt" placeholder="0.00"></div>
+                <div class="form-row" style="max-width: 440px;">
+                    <div>
+                        <label>Categoría del Ingreso</label>
+                        <div class="income-type-selector">
+                            <label class="income-radio-label">
+                                <input type="radio" name="income-category-radio" value="Ingresos personales" checked>
+                                <span><i class="fa-solid fa-user-shield" style="color: var(--primary); margin-right: 4px;"></i> Ingresos personales</span>
+                            </label>
+                            <label class="income-radio-label">
+                                <input type="radio" name="income-category-radio" value="Ingresos de trabajo">
+                                <span><i class="fa-solid fa-briefcase" style="color: var(--warning); margin-right: 4px;"></i> Ingresos de trabajo</span>
+                            </label>
+                            <label class="income-radio-label">
+                                <input type="radio" name="income-category-radio" value="Ingresos extras">
+                                <span><i class="fa-solid fa-gift" style="color: #ec4899; margin-right: 4px;"></i> Ingresos extras (regalos, cumpleaños)</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
-                <button onclick="ejecutarIngresoGlobal()" class="btn" style="background-color: var(--primary); max-width: 400px;">Confirmar Ingreso</button>
+                <div class="form-row" style="max-width: 440px;">
+                    <div><label>Monto del Ingreso ($)</label><input type="number" id="global-income-amt" step="0.01" placeholder="0.00"></div>
+                </div>
+                <button onclick="ejecutarIngresoGlobal()" class="btn" style="background-color: var(--success); max-width: 440px;">Confirmar Entrada</button>
             </div>
 
+            <!-- PANEL DE GASTOS CON TABLA RESUMEN AL COSTADO -->
             <div id="panel-gastos-pastel" class="action-panel">
                 <div class="panel-header">
-                    <h3><i class="fa-solid fa-chart-pie" style="color: var(--danger); margin-right: 10px;"></i> Distribución Porcentual de tus Gastos</h3>
+                    <h3><i class="fa-solid fa-chart-pie" style="color: var(--danger); margin-right: 10px;"></i> Distribución Porcentual y Costos de Gastos</h3>
                     <i class="fa-solid fa-xmark" onclick="cerrarPanelGastosPastel()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
                 </div>
-                <div style="max-width: 340px; margin: 0 auto; position: relative; height: 340px;">
-                    <canvas id="pieChart"></canvas>
+                <div class="chart-layout-box">
+                    <div style="width: 280px; position: relative; height: 280px;">
+                        <canvas id="pieChart"></canvas>
+                    </div>
+                    <!-- Tabla resumen con costos escritos a un lado -->
+                    <div>
+                        <h4 style="margin: 0 0 10px 0; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Resumen de Costos</h4>
+                        <table class="chart-summary-table">
+                            <tbody id="pie-summary-body">
+                                <!-- Se llena dinámicamente mediante JS -->
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
 
-            <h3 style="margin-bottom: 15px; font-weight: 600;"><i class="fa-solid fa-layer-group" style="color: var(--primary); margin-right: 8px;"></i> Gestionar Categorías de Gasto</h3>
+            <h3 style="margin-bottom: 15px; font-weight: 800; font-size: 1.3rem;"><i class="fa-solid fa-layer-group" style="color: var(--primary); margin-right: 8px;"></i> Gestionar Categorías de Gasto</h3>
 
             <div class="categories-grid">
                 <div class="category-box" onclick="abrirPanel('alimentacion', 'fa-utensils', '#ef4444')"><i class="fa-solid fa-utensils" style="color: #ef4444;"></i><span>Alimentación</span></div>
@@ -216,27 +308,32 @@
                 <div class="category-box" onclick="abrirPanel('vivienda', 'fa-house', '#10b981')"><i class="fa-solid fa-house" style="color: #10b981;"></i><span>Vivienda</span></div>
                 <div class="category-box" onclick="abrirPanel('salud', 'fa-heart-pulse', '#ec4899')"><i class="fa-solid fa-heart-pulse" style="color: #ec4899;"></i><span>Salud</span></div>
                 <div class="category-box" onclick="abrirPanel('educacion', 'fa-graduation-cap', '#8b5cf6')"><i class="fa-solid fa-graduation-cap" style="color: #8b5cf6;"></i><span>Educación</span></div>
-                <div class="category-box" onclick="abrirPanel('otros', 'fa-ellipsis-h', '#64748b')"><i class="fa-solid fa-ellipsis-h" style="color: #64748b;"></i><span>Otros</span></div>
+                <!-- Categoría "Otros" descriptiva -->
+                <div class="category-box" onclick="abrirPanel('otros', 'fa-ellipsis-h', '#64748b')"><i class="fa-solid fa-ellipsis-h" style="color: #64748b;"></i><span>Otros (regalos, imprevistos...)</span></div>
             </div>
 
             <div id="panel-operacion" class="action-panel">
                 <div class="panel-header">
-                    <h3 id="panel-title">Operación</h3>
+                    <h3 id="panel-title" style="font-weight: 800;">Operación</h3>
                     <i class="fa-solid fa-xmark" onclick="cerrarPanel()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
                 </div>
                 <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
                     <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
                         <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
-                            <h5 style="margin: 0 0 12px 0; font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Registrar Gasto</h5>
+                            <h5 style="margin: 0 0 12px 0; font-size:0.8rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Registrar Gasto</h5>
                             <div class="form-row">
-                                <div><label>Monto ($)</label><input type="number" id="t-amt" placeholder="0.00"></div>
+                                <div><label>Monto ($)</label><input type="number" id="t-amt" step="0.01" placeholder="0.00"></div>
                             </div>
                             <button onclick="ejecutarGasto()" class="btn" style="background-color: var(--danger);">Confirmar Gasto</button>
                             <div id="alerta-toast" style="padding:10px; background:#fffbeb; border-left:4px solid var(--warning); color:#78350f; border-radius:6px; font-size:0.85rem; margin-top:12px; display:none;"></div>
                         </div>
                         <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
-                            <h5 style="margin: 0 0 12px 0; font-size:0.8rem; font-weight:700; color:var(--text-muted); text-transform:uppercase;">Asignar Límite Máximo</h5>
-                            <div style="margin-bottom: 16px;"><label>Nuevo Presupuesto ($)</label><input type="number" id="b-amt" placeholder="0.00"></div>
+                            <h5 style="margin: 0 0 12px 0; font-size:0.8rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Asignar Límite Máximo</h5>
+                            <div style="margin-bottom: 16px;">
+                                <label>Nuevo Presupuesto ($)</label>
+                                <input type="number" id="b-amt" step="0.01" placeholder="0.00">
+                                <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; display:block; margin-top:4px;">Mínimo: $1.00</span>
+                            </div>
                             <button onclick="ejecutarPresupuesto()" class="btn" style="background-color: var(--primary);">Fijar Límite</button>
                         </div>
                     </div>
@@ -245,18 +342,18 @@
 
             <div class="bottom-grid">
                 <div class="card">
-                    <h3 style="margin:0 0 15px 0;"><i class="fa-solid fa-chart-bar" style="color:var(--primary); margin-right:8px;"></i> Comparativa Mensual</h3>
+                    <h3 style="margin:0 0 15px 0; font-weight: 800;"><i class="fa-solid fa-chart-bar" style="color:var(--primary); margin-right:8px;"></i> Comparativa Mensual</h3>
                     <div style="position: relative; height: 260px;"><canvas id="analyticsChart"></canvas></div>
                 </div>
                 <div class="right-block">
                     <div class="card" style="margin-bottom: 20px;">
-                        <h3 style="margin:0 0 15px 0;"><i class="fa-solid fa-bullseye" style="color:var(--warning); margin-right:8px;"></i> Presupuestos Activos</h3>
+                        <h3 style="margin:0 0 15px 0; font-weight: 800;"><i class="fa-solid fa-bullseye" style="color:var(--warning); margin-right:8px;"></i> Presupuestos Activos</h3>
                         <div id="container-presupuestos"></div>
                     </div>
                     <div class="card">
                         <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:15px;">
-                            <h3 style="margin:0;"><i class="fa-solid fa-history" style="color:var(--text-muted); margin-right:8px;"></i> Historial</h3>
-                            <button onclick="reiniciarApp()" style="background:none; border:1px solid #fee2e2; color:var(--danger); padding:4px 8px; border-radius:6px; cursor:pointer; font-size:0.75rem;">Limpiar</button>
+                            <h3 style="margin:0; font-weight: 800;"><i class="fa-solid fa-history" style="color:var(--text-muted); margin-right:8px;"></i> Historial</h3>
+                            <button onclick="reiniciarApp()" style="background:none; border:1px solid #fee2e2; color:var(--danger); padding:4px 8px; border-radius:6px; cursor:pointer; font-size:0.75rem; font-weight: 700;">Limpiar</button>
                         </div>
                         <table>
                             <thead><tr><th>Tipo</th><th>Categoría</th><th>Monto</th></tr></thead>
@@ -322,8 +419,14 @@
             } else {
                 // MODO REGISTRO
                 const nombreInput = document.getElementById('auth-name').value;
-                const cicloInput = document.getElementById('auth-ciclo').value;
+                const cicloInput = parseInt(document.getElementById('auth-ciclo').value);
+                
                 if(!nombreInput) return alert("Por favor introduce tu nombre.");
+                
+                // VALIDACIÓN: Control de rango de ciclo (1-31)
+                if(isNaN(cicloInput) || cicloInput < 1 || cicloInput > 31) {
+                    return alert("El día de pago configurado debe estar estrictamente entre el 1 y el 31 de cada mes.");
+                }
 
                 try {
                     const res = await fetch(`${API_URL}/auth/registrar`, {
@@ -333,7 +436,7 @@
                             nombre: nombreInput, 
                             email: correoInput, 
                             password: contrasenaInput,
-                            ciclo_inicio_dia: parseInt(cicloInput) 
+                            ciclo_inicio_dia: cicloInput 
                         })
                     });
                     const datos = await res.json();
@@ -383,7 +486,11 @@
             cerrarPanelIngreso();
             cerrarPanelGastosPastel();
             categoriaSeleccionada = cat;
-            document.getElementById('panel-title').innerHTML = `<i class="fa-solid ${icono}" style="color: ${color}; margin-right: 10px;"></i> Operar Categoría: <span style="text-transform:uppercase; color:${color}; font-weight:700;">${cat}</span>`;
+            
+            let labelDisplay = cat;
+            if(cat === 'otros') labelDisplay = "Otros (regalos, imprevistos...)";
+
+            document.getElementById('panel-title').innerHTML = `<i class="fa-solid ${icono}" style="color: ${color}; margin-right: 10px;"></i> Operar Categoría: <span style="text-transform:uppercase; color:${color}; font-weight:800;">${labelDisplay}</span>`;
             document.getElementById('panel-operacion').style.display = "block";
             document.getElementById('alerta-toast').style.display = "none";
             document.getElementById('panel-operacion').scrollIntoView({ behavior: 'smooth' });
@@ -406,7 +513,7 @@
             });
         }
 
-        // GRÁFICO DE PASTEL CONECTADO AL ENDPOINT
+        // GRÁFICO DE PASTEL CONECTADO AL ENDPOINT + NUEVA TABLA RESUMEN ESCRITA
         async function cargarGraficoPastel() {
             const token = localStorage.getItem("token");
             try {
@@ -417,26 +524,52 @@
                 const valores = Object.values(datos);
 
                 const ctx = document.getElementById('pieChart').getContext('2d');
+                const summaryBody = document.getElementById('pie-summary-body');
+                summaryBody.innerHTML = ""; 
+                
                 if(pieChart) pieChart.destroy();
 
-                if(valores.reduce((a, b) => a + b, 0) === 0) {
+                const totalGastadoPie = valores.reduce((a, b) => a + b, 0);
+
+                if(totalGastadoPie === 0) {
                     ctx.clearRect(0,0,340,340);
+                    summaryBody.innerHTML = `<tr><td style="color:var(--text-muted); text-align:center;">Sin costos que reportar.</td></tr>`;
                     alert("Aún no tienes gastos registrados en este ciclo para graficar.");
                     cerrarPanelGastosPastel();
                     return;
                 }
 
+                const coloresPastel = ['#ef4444', '#3b82f6', '#f59e0b', '#10b981', '#ec4899', '#8b5cf6', '#64748b'];
+
                 pieChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: labels.map(l => l.toUpperCase()),
+                        labels: labels.map(l => l === 'otros' ? 'OTROS (REGALOS, ETC.)' : l.toUpperCase()),
                         datasets: [{
                             data: valores,
-                            backgroundColor: ['#ef4444', '#3b82f6', '#f59e0b', '#10b981', '#ec4899', '#8b5cf6', '#64748b']
+                            backgroundColor: coloresPastel
                         }]
                     },
                     options: { responsive: true, maintainAspectRatio: false }
                 });
+
+                labels.forEach((cat, index) => {
+                    const costo = valores[index];
+                    const porcentaje = totalGastadoPie > 0 ? ((costo / totalGastadoPie) * 100).toFixed(0) : 0;
+                    const colorMarca = coloresPastel[index % coloresPastel.length];
+                    let labelFinal = cat === 'otros' ? 'Otros (regalos...)' : cat;
+
+                    summaryBody.innerHTML += `
+                        <tr>
+                            <td>
+                                <span style="display:inline-block; width:10px; height:10px; border-radius:50%; background-color:${colorMarca}; margin-right:6px;"></span>
+                                <span style="text-transform:capitalize;">${labelFinal}</span>
+                            </td>
+                            <td style="text-align:right;"><strong>$${costo.toFixed(2)}</strong> <span style="font-size:0.75rem; color:var(--text-muted);">(${porcentaje}%)</span></td>
+                        </tr>
+                    `;
+                });
+
             } catch(e) {
                 console.log("No se pudo estructurar el gráfico.");
             }
@@ -480,10 +613,12 @@
                         if(pct >= 100) color = "var(--danger)";
                         else if(pct >= 80) color = "var(--warning)";
 
+                        let labelDisplay = cat === 'otros' ? 'Otros (regalos, imprevistos...)' : cat;
+
                         contenedorB.innerHTML += `
                             <div class="budget-bar-box">
-                                <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:600;">
-                                    <span style="text-transform:capitalize;">${cat}</span>
+                                <div style="display:flex; justify-content:space-between; font-size:0.85rem; font-weight:700;">
+                                    <span style="text-transform:capitalize;">${labelDisplay}</span>
                                     <span>$${info.consumido.toFixed(0)} / $${info.limite.toFixed(0)}</span>
                                 </div>
                                 <div class="bar-bg"><div class="bar-fill" style="width:${Math.min(pct, 100)}%; background-color:${color}"></div></div>
@@ -502,23 +637,31 @@
                     return;
                 }
                 filtradas.slice(-4).reverse().forEach(t => {
-                    contenedorT.innerHTML += `<tr><td><span class="badge ${t.tipo==='gasto'?'badge-g':'badge-i'}">${t.tipo.toUpperCase()}</span></td><td style="text-transform:capitalize;">${t.categoria || 'Global'}</td><td><strong>$${t.monto.toFixed(2)}</strong></td></tr>`;
+                    let catName = t.categoria || 'Global';
+                    if(catName === 'otros') catName = 'Otros (regalos...)';
+                    contenedorT.innerHTML += `<tr><td><span class="badge ${t.tipo==='gasto'?'badge-g':'badge-i'}">${t.tipo.toUpperCase()}</span></td><td style="text-transform:capitalize;">${catName}</td><td><strong>$${t.monto.toFixed(2)}</strong></td></tr>`;
                 });
             } catch (e) {
                 console.log("Cargando datos...");
             }
         }
 
-        // ACCIÓN DE INGRESO CENTRALIZADO
+        // ACCIÓN DE INGRESO CON CATEGORÍAS INCORPORADAS
         async function ejecutarIngresoGlobal() {
             const token = localStorage.getItem("token");
             const monto = document.getElementById('global-income-amt').value;
+            const categoriaSeleccionadaIngreso = document.querySelector('input[name="income-category-radio"]:checked').value;
+
             if(!monto || parseFloat(monto) <= 0) return alert("Ingresa un monto válido para tu ingreso.");
 
             await fetch(`${API_URL}/transacciones/?token=${token}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ tipo: 'ingreso', categoria: 'global', monto: parseFloat(monto) })
+                body: JSON.stringify({ 
+                    tipo: 'ingreso', 
+                    categoria: categoriaSeleccionadaIngreso, 
+                    monto: parseFloat(monto) 
+                })
             });
             document.getElementById('global-income-amt').value = '';
             cerrarPanelIngreso();
@@ -551,13 +694,18 @@
 
         async function ejecutarPresupuesto() {
             const token = localStorage.getItem("token");
-            const limite = document.getElementById('b-amt').value;
-            if(!limite || !categoriaSeleccionada) return alert("Ingresa un límite válido");
+            const limite = parseFloat(document.getElementById('b-amt').value);
+            if(isNaN(limite) || !categoriaSeleccionada) return alert("Ingresa un límite válido");
+
+            // VALIDACIÓN: Mínimo $1.00 por categoría a nivel presupuestario
+            if(limite < 1.0) {
+                return alert("El presupuesto mínimo para fijar en cualquier categoría debe ser de $1.00.");
+            }
 
             await fetch(`${API_URL}/presupuestos/?token=${token}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ categoria: categoriaSeleccionada, limite_maximo: parseFloat(limite) })
+                body: JSON.stringify({ categoria: categoriaSeleccionada, limite_maximo: limite })
             });
             document.getElementById('b-amt').value = '';
             alert(`Límite para ${categoriaSeleccionada} fijado correctamente.`);
@@ -573,4 +721,4 @@
         }
     </script>
 </body>
-</html>
+</html> 
