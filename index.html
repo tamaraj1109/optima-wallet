@@ -21,7 +21,6 @@
             --danger: #ef4444;
             --border: #e2e8f0;
             --radius: 16px;
-            /* NUEVO COLOR: Azul claro llamativo para los títulos del panel de operaciones */
             --accent-blue: #3b82f6; 
         }
 
@@ -55,7 +54,7 @@
         .auth-card h2 { margin: 0 0 8px 0; font-size: 1.5rem; }
         .auth-card p { color: var(--text-muted); font-size: 0.85rem; margin: 0 0 24px 0; }
 
-        /* INTERFAZ PRINCIPAL (DASHBOARD) - OCULTA INICIALMENTE */
+        /* INTERFAZ PRINCIPAL (DASHBOARD) */
         .dashboard-layout-root {
             display: none; 
         }
@@ -113,36 +112,12 @@
         .category-box i { font-size: 1.8rem; margin-bottom: 12px; display: block; }
         .category-box span { font-size: 0.9rem; font-weight: 700; color: #334155; }
 
-        /* Opciones de Radio de Ingresos Premium */
-        .income-type-selector {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            margin-bottom: 18px;
-        }
-        .income-radio-label {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            padding: 12px;
-            background: #f8fafc;
-            border: 1px solid var(--border);
-            border-radius: 10px;
-            cursor: pointer;
-            font-size: 0.9rem;
-            font-weight: 600;
-            transition: all 0.15s;
-        }
-        .income-radio-label:hover {
-            border-color: var(--success);
-            background: #f0fdf4;
-        }
-        .income-radio-label input {
-            width: auto;
-            margin: 0;
-        }
+        .income-type-selector { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+        .income-radio-label { display: flex; align-items: center; gap: 10px; padding: 12px; background: #f8fafc; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; font-size: 0.9rem; font-weight: 600; transition: all 0.15s; }
+        .income-radio-label:hover { border-color: var(--success); background: #f0fdf4; }
+        .income-radio-label input { width: auto; margin: 0; }
 
-        /* PANELS TRANSFORMADOS EN VENTANAS FLOTANTES (MODALS) CENTRADOS */
+        /* MODALS VENTANAS FLOTANTES */
         .action-panel { 
             position: fixed;
             top: 50%;
@@ -169,42 +144,32 @@
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background-color: #f8fafc; box-sizing: border-box; font-size: 0.95rem; }
         input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff; }
         
-        /* CORRECCIÓN ADICIONADA: Labels de los campos internos más llamativos y claros (Monto y Presupuesto) */
-        label { 
-            display: block; 
-            font-size: 0.82rem; 
-            font-weight: 800; 
-            color: var(--accent-blue); 
-            margin-bottom: 8px; 
-            text-transform: uppercase;
-            letter-spacing: 0.03em;
-        }
-
+        label { display: block; font-size: 0.82rem; font-weight: 800; color: var(--accent-blue); margin-bottom: 8px; text-transform: uppercase; letter-spacing: 0.03em; }
         .btn { padding: 12px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; color: white; width: 100%; font-size: 0.95rem; }
 
-        /* Gráficos con Tabla Resumen a los lados dentro del modal */
+        /* Contenedor del Gráfico y Tabla Optimizado */
         .chart-layout-box {
             display: flex;
             flex-direction: column;
-            gap: 20px;
+            gap: 15px;
             align-items: center;
             width: 100%;
+        }
+        .chart-wrapper {
+            width: 180px; 
+            height: 180px; 
+            position: relative;
+            margin: 0 auto;
         }
         .chart-summary-table {
             width: 100%;
             border-collapse: collapse;
-            margin-top: 10px;
+            margin-top: 5px;
         }
-        .chart-summary-table tr {
-            border-bottom: 1px solid #f1f5f9;
-        }
-        .chart-summary-table td {
-            padding: 8px 4px;
-            font-size: 0.85rem;
-            font-weight: 600;
-        }
+        .chart-summary-table tr { border-bottom: 1px solid #f1f5f9; }
+        .chart-summary-table td { padding: 8px 6px; font-size: 0.85rem; font-weight: 600; }
 
-        /* Gráficos e Historial */
+        /* Estructura Inferior */
         .bottom-grid { display: grid; grid-template-columns: 1fr; gap: 24px; }
         @media (min-width: 950px) { .bottom-grid { grid-template-columns: 1fr 420px; } }
         .card { background: var(--surface); padding: 24px; border-radius: var(--radius); border: 1px solid var(--border); }
@@ -220,21 +185,12 @@
         .badge-g { background-color: #fee2e2; color: var(--danger); }
         .badge-i { background-color: #d1fae5; color: var(--success); }
         
-        /* CORRECCIÓN ADICIONADA: Títulos de subtarjeta más llamativos y en color azul claro vivo (Registrar Gasto / Asignar Límite) */
-        .operation-subtitle {
-            margin: 0 0 14px 0; 
-            font-size: 0.95rem; 
-            font-weight: 800; 
-            color: var(--primary); 
-            text-transform: uppercase;
-            letter-spacing: 0.04em;
-        }
+        .operation-subtitle { margin: 0 0 14px 0; font-size: 0.95rem; font-weight: 800; color: var(--primary); text-transform: uppercase; letter-spacing: 0.04em; }
     </style>
 </head>
 <body>
 
-    <!-- FONDO OSCURO PARA ENFOCAR LOS MODALS -->
-    <div id="modal-overlay" onclick="cerrarTodosLosPaneles()" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 90; display: none; transition: all 0.3s;"></div>
+    <div id="modal-overlay" onclick="cerrarTodosLosPaneles()" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 90; display: none;"></div>
 
     <div id="auth-screen" class="auth-container">
         <div class="auth-card">
@@ -284,7 +240,6 @@
                 <div class="kpi-card savings"><div class="kpi-data"><h4>Ahorro Acumulado</h4><p id="total-savings" style="color: #8b5cf6;">$0.00</p></div><div class="kpi-icon"><i class="fa-solid fa-piggy-bank"></i></div></div>
             </div>
 
-            <!-- MODAL / PANEL DE INGRESO CON CATEGORÍAS ADICIONADAS -->
             <div id="panel-ingreso-global" class="action-panel">
                 <div class="panel-header">
                     <h3 style="font-weight: 800; margin:0;"><i class="fa-solid fa-money-bill-trend-up" style="color: var(--success); margin-right: 10px;"></i> Inyectar Flujo de Ingreso</h3>
@@ -304,7 +259,7 @@
                             </label>
                             <label class="income-radio-label">
                                 <input type="radio" name="income-category-radio" value="Ingresos extras">
-                                <span><i class="fa-solid fa-gift" style="color: #ec4899; margin-right: 4px;"></i> Ingresos extras (regalos, cumpleaños)</span>
+                                <span><i class="fa-solid fa-gift" style="color: #ec4899; margin-right: 4px;"></i> Ingresos extras</span>
                             </label>
                         </div>
                     </div>
@@ -315,22 +270,20 @@
                 <button onclick="ejecutarIngresoGlobal()" class="btn" style="background-color: var(--success);">Confirmar Entrada</button>
             </div>
 
-            <!-- PANEL DE GASTOS CON TABLA RESUMEN AL COSTADO -->
             <div id="panel-gastos-pastel" class="action-panel">
                 <div class="panel-header">
                     <h3 style="font-weight: 800; margin:0;"><i class="fa-solid fa-chart-pie" style="color: var(--danger); margin-right: 10px;"></i> Distribución y Costos</h3>
                     <i class="fa-solid fa-xmark" onclick="cerrarPanelGastosPastel()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
                 </div>
                 <div class="chart-layout-box">
-                    <div style="width: 200px; position: relative; height: 200px;">
+                    <div class="chart-wrapper">
                         <canvas id="pieChart"></canvas>
                     </div>
                     <div style="width: 100%;">
-                        <h4 style="margin: 10px 0 5px 0; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Resumen de Costos</h4>
+                        <h4 style="margin: 5px 0; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted); letter-spacing: 0.05em;">Resumen de Costos por Categoría</h4>
                         <table class="chart-summary-table">
                             <tbody id="pie-summary-body">
-                                <!-- Se llena dinámicamente mediante JS -->
-                            </tbody>
+                                </tbody>
                         </table>
                     </div>
                 </div>
@@ -345,10 +298,9 @@
                 <div class="category-box" onclick="abrirPanel('vivienda', 'fa-house', '#10b981')"><i class="fa-solid fa-house" style="color: #10b981;"></i><span>Vivienda</span></div>
                 <div class="category-box" onclick="abrirPanel('salud', 'fa-heart-pulse', '#ec4899')"><i class="fa-solid fa-heart-pulse" style="color: #ec4899;"></i><span>Salud</span></div>
                 <div class="category-box" onclick="abrirPanel('educacion', 'fa-graduation-cap', '#8b5cf6')"><i class="fa-solid fa-graduation-cap" style="color: #8b5cf6;"></i><span>Educación</span></div>
-                <div class="category-box" onclick="abrirPanel('otros', 'fa-ellipsis-h', '#64748b')"><i class="fa-solid fa-ellipsis-h" style="color: #64748b;"></i><span>Otros (regalos...)</span></div>
+                <div class="category-box" onclick="abrirPanel('otros', 'fa-ellipsis-h', '#64748b')"><i class="fa-solid fa-ellipsis-h" style="color: #64748b;"></i><span>Otros</span></div>
             </div>
 
-            <!-- MODAL DE OPERACIONES ACTUALIZADO CON LOS TEXTOS CORREGIDOS PARA EL PROFESOR -->
             <div id="panel-operacion" class="action-panel">
                 <div class="panel-header">
                     <h3 id="panel-title" style="font-weight: 800; margin:0;">Operación</h3>
@@ -356,7 +308,6 @@
                 </div>
                 <div style="display: flex; flex-direction: column; gap: 20px;">
                     <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
-                        <!-- Clase operation-subtitle añadida para cambiar el color a azul y aumentar grosor -->
                         <h5 class="operation-subtitle">Registrar Gasto</h5>
                         <div class="form-row">
                             <div><label>Monto ($)</label><input type="number" id="t-amt" step="0.01" placeholder="0.00"></div>
@@ -365,12 +316,10 @@
                         <div id="alerta-toast" style="padding:10px; background:#fffbeb; border-left:4px solid var(--warning); color:#78350f; border-radius:6px; font-size:0.85rem; margin-top:12px; display:none;"></div>
                     </div>
                     <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
-                        <!-- Clase operation-subtitle añadida aquí también -->
                         <h5 class="operation-subtitle">Asignar Límite Máximo</h5>
                         <div style="margin-bottom: 16px;">
                             <label>Nuevo Presupuesto ($)</label>
                             <input type="number" id="b-amt" step="0.01" placeholder="0.00">
-                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; display:block; margin-top:4px;">Mínimo: $1.00</span>
                         </div>
                         <button onclick="ejecutarPresupuesto()" class="btn" style="background-color: var(--primary);">Fijar Límite</button>
                     </div>
@@ -412,9 +361,7 @@
         window.onload = function() {
             const token = localStorage.getItem("token");
             const nombre = localStorage.getItem("nombre");
-            if(token && nombre) {
-                mostrarDashboard(nombre);
-            }
+            if(token && nombre) mostrarDashboard(nombre);
         };
 
         function conmutarModoAuth() {
@@ -429,7 +376,6 @@
         async function procesarAuth() {
             const correoInput = document.getElementById('auth-email').value;
             const contrasenaInput = document.getElementById('auth-password').value;
-            
             if(!correoInput || !contrasenaInput) return alert("Por favor, llena los campos básicos.");
 
             if(modoLogin) {
@@ -440,51 +386,28 @@
                         body: JSON.stringify({ email: correoInput, password: contrasenaInput })
                     });
                     const datos = await res.json();
-
-                    if(!res.ok) {
-                        alert(datos.detail || "Error en el inicio de sesión.");
-                        return;
-                    }
-
+                    if(!res.ok) return alert(datos.detail || "Error en el inicio de sesión.");
                     localStorage.setItem("token", datos.access_token);
                     localStorage.setItem("nombre", datos.nombre);
                     mostrarDashboard(datos.nombre);
-                } catch (err) {
-                    alert("Error de conexión con el servidor.");
-                }
+                } catch (err) { alert("Error de conexión con el servidor."); }
             } else {
                 const nombreInput = document.getElementById('auth-name').value;
                 const cicloInput = parseInt(document.getElementById('auth-ciclo').value);
-                
                 if(!nombreInput) return alert("Por favor introduce tu nombre.");
-                
-                if(isNaN(cicloInput) || cicloInput < 1 || cicloInput > 31) {
-                    return alert("El día de pago configurado debe estar estrictamente entre el 1 y el 31 de cada mes.");
-                }
+                if(isNaN(cicloInput) || cicloInput < 1 || cicloInput > 31) return alert("El día de pago configurado debe estar entre 1 y 31.");
 
                 try {
                     const res = await fetch(`${API_URL}/auth/registrar`, {
                         method: 'POST',
                         headers: {'Content-Type': 'application/json'},
-                        body: JSON.stringify({ 
-                            nombre: nombreInput, 
-                            email: correoInput, 
-                            password: contrasenaInput,
-                            ciclo_inicio_dia: cicloInput 
-                        })
+                        body: JSON.stringify({ nombre: nombreInput, email: correoInput, password: contrasenaInput, ciclo_inicio_dia: cicloInput })
                     });
                     const datos = await res.json();
-
-                    if(!res.ok) {
-                        alert(datos.detail || "Error al registrar la cuenta.");
-                        return;
-                    }
-
-                    alert(datos.mensaje || "Cuenta creada con éxito.");
+                    if(!res.ok) return alert(datos.detail || "Error al registrar.");
+                    alert(datos.mensaje || "Cuenta creada.");
                     conmutarModoAuth();
-                } catch (err) {
-                    alert("Error de conexión al registrar.");
-                }
+                } catch (err) { alert("Error de conexión."); }
             }
         }
 
@@ -495,58 +418,29 @@
             refrescarDashboard();
         }
 
-        function logout() {
-            localStorage.clear();
-            location.reload();
+        function logout() { localStorage.clear(); location.reload(); }
+        function abrirPanelIngreso() { cerrarTodosLosPaneles(); document.getElementById('panel-ingreso-global').style.display = "block"; document.getElementById('modal-overlay').style.display = "block"; }
+        function cerrarPanelIngreso() { document.getElementById('panel-ingreso-global').style.display = "none"; document.getElementById('modal-overlay').style.display = "none"; }
+        
+        function abrirPanelGastosPastel() { 
+            cerrarTodosLosPaneles(); 
+            document.getElementById('panel-gastos-pastel').style.display = "block"; 
+            document.getElementById('modal-overlay').style.display = "block"; 
+            cargarGraficoPastel(); 
         }
-
-        function abrirPanelIngreso() {
-            cerrarPanel();
-            cerrarPanelGastosPastel();
-            document.getElementById('panel-ingreso-global').style.display = "block";
-            document.getElementById('modal-overlay').style.display = "block";
-        }
-        function cerrarPanelIngreso() { 
-            document.getElementById('panel-ingreso-global').style.display = "none"; 
-            document.getElementById('modal-overlay').style.display = "none";
-        }
-
-        function abrirPanelGastosPastel() {
-            cerrarPanel();
-            cerrarPanelIngreso();
-            document.getElementById('panel-gastos-pastel').style.display = "block";
-            document.getElementById('modal-overlay').style.display = "block";
-            cargarGraficoPastel();
-        }
-        function cerrarPanelGastosPastel() { 
-            document.getElementById('panel-gastos-pastel').style.display = "none"; 
-            document.getElementById('modal-overlay').style.display = "none";
-        }
+        function cerrarPanelGastosPastel() { document.getElementById('panel-gastos-pastel').style.display = "none"; document.getElementById('modal-overlay').style.display = "none"; }
 
         function abrirPanel(cat, icono, color) {
-            cerrarPanelIngreso();
-            cerrarPanelGastosPastel();
+            cerrarTodosLosPaneles();
             categoriaSeleccionada = cat;
-            
-            let labelDisplay = cat;
-            if(cat === 'otros') labelDisplay = "Otros (regalos, imprevistos...)";
-
+            let labelDisplay = cat === 'otros' ? "Otros (regalos, imprevistos...)" : cat;
             document.getElementById('panel-title').innerHTML = `<i class="fa-solid ${icono}" style="color: ${color}; margin-right: 10px;"></i> Operar Categoría: <span style="text-transform:uppercase; color:${color}; font-weight:800;">${labelDisplay}</span>`;
             document.getElementById('panel-operacion').style.display = "block";
             document.getElementById('modal-overlay').style.display = "block";
             document.getElementById('alerta-toast').style.display = "none";
         }
-        function cerrarPanel() { 
-            document.getElementById('panel-operacion').style.display = "none"; 
-            document.getElementById('modal-overlay').style.display = "none";
-            categoriaSeleccionada = ""; 
-        }
-
-        function cerrarTodosLosPaneles() {
-            cerrarPanelIngreso();
-            cerrarPanelGastosPastel();
-            cerrarPanel();
-        }
+        function cerrarPanel() { document.getElementById('panel-operacion').style.display = "none"; document.getElementById('modal-overlay').style.display = "none"; categoriaSeleccionada = ""; }
+        function cerrarTodosLosPaneles() { cerrarPanelIngreso(); cerrarPanelGastosPastel(); cerrarPanel(); }
 
         function initChart(labels = [], dataGasto = [], dataLimite = []) {
             const ctx = document.getElementById('analyticsChart').getContext('2d');
@@ -564,6 +458,7 @@
             });
         }
 
+        /* CONFIGURACIÓN DEL GRÁFICO SIN TEXTOS DE LEYENDA ARRIBA */
         async function cargarGraficoPastel() {
             const token = localStorage.getItem("token");
             try {
@@ -578,14 +473,11 @@
                 summaryBody.innerHTML = ""; 
                 
                 if(pieChart) pieChart.destroy();
-
                 const totalGastadoPie = valores.reduce((a, b) => a + b, 0);
 
                 if(totalGastadoPie === 0) {
-                    ctx.clearRect(0,0,200,200);
-                    summaryBody.innerHTML = `<tr><td style="color:var(--text-muted); text-align:center;">Sin costos que reportar.</td></tr>`;
-                    alert("Aún no tienes gastos registrados en este ciclo para graficar.");
-                    cerrarPanelGastosPastel();
+                    ctx.clearRect(0,0,180,180);
+                    summaryBody.innerHTML = `<tr><td style="color:var(--text-muted); text-align:center;">Sin costos en este ciclo.</td></tr>`;
                     return;
                 }
 
@@ -594,18 +486,23 @@
                 pieChart = new Chart(ctx, {
                     type: 'pie',
                     data: {
-                        labels: labels.map(l => l === 'otros' ? 'OTROS (REGALOS, ETC.)' : l.toUpperCase()),
-                        datasets: [{
-                            data: valores,
-                            backgroundColor: coloresPastel
-                        }]
+                        labels: labels.map(l => l.toUpperCase()),
+                        datasets: [{ data: valores, backgroundColor: coloresPastel }]
                     },
-                    options: { responsive: true, maintainAspectRatio: false }
+                    options: { 
+                        responsive: true, 
+                        maintainAspectRatio: false,
+                        plugins: {
+                            legend: {
+                                display: false // ¡QUITA LAS LETRAS / CUADROS DE ARRIBA SOLICITADOS!
+                            }
+                        }
+                    }
                 });
 
                 labels.forEach((cat, index) => {
                     const costo = valores[index];
-                    const porcentaje = totalGastadoPie > 0 ? ((costo / totalGastadoPie) * 100).toFixed(0) : 0;
+                    const porcentaje = ((costo / totalGastadoPie) * 100).toFixed(0);
                     const colorMarca = coloresPastel[index % coloresPastel.length];
                     let labelFinal = cat === 'otros' ? 'Otros (regalos...)' : cat;
 
@@ -619,10 +516,7 @@
                         </tr>
                     `;
                 });
-
-            } catch(e) {
-                console.log("No se pudo estructurar el gráfico.");
-            }
+            } catch(e) { console.log(e); }
         }
 
         async function refrescarDashboard() {
@@ -663,7 +557,7 @@
                         if(pct >= 100) color = "var(--danger)";
                         else if(pct >= 80) color = "var(--warning)";
 
-                        let labelDisplay = cat === 'otros' ? 'Otros (regalos, imprevistos...)' : cat;
+                        let labelDisplay = cat === 'otros' ? 'Otros' : cat;
 
                         contenedorB.innerHTML += `
                             <div class="budget-bar-box">
@@ -688,29 +582,21 @@
                 }
                 filtradas.slice(-4).reverse().forEach(t => {
                     let catName = t.categoria || 'Global';
-                    if(catName === 'otros') catName = 'Otros (regalos...)';
                     contenedorT.innerHTML += `<tr><td><span class="badge ${t.tipo==='gasto'?'badge-g':'badge-i'}">${t.tipo.toUpperCase()}</span></td><td style="text-transform:capitalize;">${catName}</td><td><strong>$${t.monto.toFixed(2)}</strong></td></tr>`;
                 });
-            } catch (e) {
-                console.log("Cargando datos...");
-            }
+            } catch (e) { console.log(e); }
         }
 
         async function ejecutarIngresoGlobal() {
             const token = localStorage.getItem("token");
             const monto = document.getElementById('global-income-amt').value;
             const categoriaSeleccionadaIngreso = document.querySelector('input[name="income-category-radio"]:checked').value;
-
-            if(!monto || parseFloat(monto) <= 0) return alert("Ingresa un monto válido para tu ingreso.");
+            if(!monto || parseFloat(monto) <= 0) return alert("Monto no válido.");
 
             await fetch(`${API_URL}/transacciones/?token=${token}`, {
                 method: 'POST',
                 headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({ 
-                    tipo: 'ingreso', 
-                    categoria: categoriaSeleccionadaIngreso, 
-                    monto: parseFloat(monto) 
-                })
+                body: JSON.stringify({ tipo: 'ingreso', categoria: categoriaSeleccionadaIngreso, monto: parseFloat(monto) })
             });
             document.getElementById('global-income-amt').value = '';
             cerrarPanelIngreso();
@@ -721,7 +607,7 @@
             const token = localStorage.getItem("token");
             const monto = document.getElementById('t-amt').value;
             const toast = document.getElementById('alerta-toast');
-            if(!monto || !categoriaSeleccionada) return alert("Ingresa un monto de gasto válido.");
+            if(!monto || !categoriaSeleccionada) return alert("Monto no válido.");
 
             const res = await fetch(`${API_URL}/transacciones/?token=${token}`, {
                 method: 'POST',
@@ -729,13 +615,8 @@
                 body: JSON.stringify({ tipo: 'gasto', categoria: categoriaSeleccionada, monto: parseFloat(monto) })
             });
             const data = await res.json();
-            
-            if(data.notificacion) {
-                toast.style.display = "block";
-                toast.innerText = data.notificacion;
-            } else {
-                toast.style.display = "none";
-            }
+            if(data.notificacion) { toast.style.display = "block"; toast.innerText = data.notificacion; }
+            else { toast.style.display = "none"; }
             document.getElementById('t-amt').value = '';
             refrescarDashboard();
         }
@@ -743,11 +624,7 @@
         async function ejecutarPresupuesto() {
             const token = localStorage.getItem("token");
             const limite = parseFloat(document.getElementById('b-amt').value);
-            if(isNaN(limite) || !categoriaSeleccionada) return alert("Ingresa un límite válido");
-
-            if(limite < 1.0) {
-                return alert("El presupuesto mínimo para fijar en cualquier categoría debe ser de $1.00.");
-            }
+            if(isNaN(limite) || !categoriaSeleccionada) return alert("Límite no válido.");
 
             await fetch(`${API_URL}/presupuestos/?token=${token}`, {
                 method: 'POST',
@@ -755,13 +632,13 @@
                 body: JSON.stringify({ categoria: categoriaSeleccionada, limite_maximo: limite })
             });
             document.getElementById('b-amt').value = '';
-            alert(`Límite para ${categoriaSeleccionada} fijado correctamente.`);
+            alert("Límite fijado.");
             refrescarDashboard();
         }
 
         async function reiniciarApp() {
             const token = localStorage.getItem("token");
-            if(!confirm("¿Vaciar tus registros personales?")) return;
+            if(!confirm("¿Vaciar registros actuales?")) return;
             await fetch(`${API_URL}/reiniciar/?token=${token}`, { method: 'POST' });
             cerrarTodosLosPaneles();
             refrescarDashboard();
