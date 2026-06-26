@@ -21,6 +21,8 @@
             --danger: #ef4444;
             --border: #e2e8f0;
             --radius: 16px;
+            /* NUEVO COLOR: Azul claro llamativo para los títulos del panel de operaciones */
+            --accent-blue: #3b82f6; 
         }
 
         body {
@@ -78,7 +80,7 @@
 
         .main-content { max-width: 1300px; margin: 30px auto; padding: 0 20px; }
 
-        /* KPIs Clickeables - TIPOGRAFÍA MÁS GRANDE Y LLAMATIVA */
+        /* KPIs Clickeables */
         .kpi-row {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
@@ -97,7 +99,7 @@
         .kpi-card.interactive:hover { transform: translateY(-3px); box-shadow: 0 10px 15px -3px rgba(0,0,0,0.05); }
 
         .kpi-data h4 { margin: 0; color: var(--text-muted); font-size: 0.85rem; text-transform: uppercase; font-weight: 700; letter-spacing: 0.05em; }
-        .kpi-data p { margin: 6px 0 0 0; font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; } /* Corregido tracking-width por letter-spacing */
+        .kpi-data p { margin: 6px 0 0 0; font-size: 2.1rem; font-weight: 800; letter-spacing: -0.02em; }
         .kpi-icon { width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 1.3rem; }
         .balance .kpi-icon { background-color: #ecfdf5; color: var(--success); }
         .incomes .kpi-icon { background-color: #eff6ff; color: var(--primary); }
@@ -140,35 +142,58 @@
             margin: 0;
         }
 
-        /* Panels Desplegables */
-        .action-panel { background: var(--surface); border: 1px solid var(--border); border-radius: var(--radius); padding: 24px; margin-bottom: 30px; display: none; animation: fadeIn 0.3s ease; }
-        @keyframes fadeIn { from { opacity: 0; transform: translateY(-10px); } to { opacity: 1; transform: translateY(0); } }
+        /* PANELS TRANSFORMADOS EN VENTANAS FLOTANTES (MODALS) CENTRADOS */
+        .action-panel { 
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--surface); 
+            border: 1px solid var(--border); 
+            border-radius: 24px; 
+            padding: 30px; 
+            width: 90%;
+            max-width: 480px; 
+            box-shadow: 0 20px 25px -5px rgba(0,0,0,0.1), 0 10px 10px -5px rgba(0,0,0,0.04);
+            z-index: 100; 
+            display: none; 
+            animation: scaleUp 0.25s ease-out; 
+        }
+        @keyframes scaleUp { 
+            from { opacity: 0; transform: translate(-50%, -45%) scale(0.95); } 
+            to { opacity: 1; transform: translate(-50%, -50%) scale(1); } 
+        }
         .panel-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
-        .form-row { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 16px; margin-bottom: 16px; }
+        .form-row { display: grid; grid-template-columns: 1fr; gap: 16px; margin-bottom: 16px; }
 
         input, select { width: 100%; padding: 12px; border: 1px solid var(--border); border-radius: 10px; background-color: #f8fafc; box-sizing: border-box; font-size: 0.95rem; }
         input:focus, select:focus { outline: none; border-color: var(--primary); background-color: #fff; }
-        label { display: block; font-size: 0.75rem; font-weight: 700; color: var(--text-muted); margin-bottom: 6px; text-transform: uppercase; }
+        
+        /* CORRECCIÓN ADICIONADA: Labels de los campos internos más llamativos y claros (Monto y Presupuesto) */
+        label { 
+            display: block; 
+            font-size: 0.82rem; 
+            font-weight: 800; 
+            color: var(--accent-blue); 
+            margin-bottom: 8px; 
+            text-transform: uppercase;
+            letter-spacing: 0.03em;
+        }
 
         .btn { padding: 12px 20px; border: none; border-radius: 10px; font-weight: 700; cursor: pointer; color: white; width: 100%; font-size: 0.95rem; }
 
-        /* Gráficos con Tabla Resumen a los lados */
+        /* Gráficos con Tabla Resumen a los lados dentro del modal */
         .chart-layout-box {
             display: flex;
             flex-direction: column;
             gap: 20px;
             align-items: center;
-        }
-        @media(min-width: 600px) {
-            .chart-layout-box {
-                flex-direction: row;
-                justify-content: space-around;
-            }
+            width: 100%;
         }
         .chart-summary-table {
             width: 100%;
-            max-width: 240px;
             border-collapse: collapse;
+            margin-top: 10px;
         }
         .chart-summary-table tr {
             border-bottom: 1px solid #f1f5f9;
@@ -194,9 +219,22 @@
         .badge { padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: 800; }
         .badge-g { background-color: #fee2e2; color: var(--danger); }
         .badge-i { background-color: #d1fae5; color: var(--success); }
+        
+        /* CORRECCIÓN ADICIONADA: Títulos de subtarjeta más llamativos y en color azul claro vivo (Registrar Gasto / Asignar Límite) */
+        .operation-subtitle {
+            margin: 0 0 14px 0; 
+            font-size: 0.95rem; 
+            font-weight: 800; 
+            color: var(--primary); 
+            text-transform: uppercase;
+            letter-spacing: 0.04em;
+        }
     </style>
 </head>
 <body>
+
+    <!-- FONDO OSCURO PARA ENFOCAR LOS MODALS -->
+    <div id="modal-overlay" onclick="cerrarTodosLosPaneles()" style="position: fixed; inset: 0; background: rgba(15, 23, 42, 0.4); backdrop-filter: blur(4px); z-index: 90; display: none; transition: all 0.3s;"></div>
 
     <div id="auth-screen" class="auth-container">
         <div class="auth-card">
@@ -249,10 +287,10 @@
             <!-- MODAL / PANEL DE INGRESO CON CATEGORÍAS ADICIONADAS -->
             <div id="panel-ingreso-global" class="action-panel">
                 <div class="panel-header">
-                    <h3><i class="fa-solid fa-money-bill-trend-up" style="color: var(--success); margin-right: 10px;"></i> Inyectar Flujo de Ingreso</h3>
+                    <h3 style="font-weight: 800; margin:0;"><i class="fa-solid fa-money-bill-trend-up" style="color: var(--success); margin-right: 10px;"></i> Inyectar Flujo de Ingreso</h3>
                     <i class="fa-solid fa-xmark" onclick="cerrarPanelIngreso()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
                 </div>
-                <div class="form-row" style="max-width: 440px;">
+                <div class="form-row">
                     <div>
                         <label>Categoría del Ingreso</label>
                         <div class="income-type-selector">
@@ -271,25 +309,24 @@
                         </div>
                     </div>
                 </div>
-                <div class="form-row" style="max-width: 440px;">
+                <div class="form-row">
                     <div><label>Monto del Ingreso ($)</label><input type="number" id="global-income-amt" step="0.01" placeholder="0.00"></div>
                 </div>
-                <button onclick="ejecutarIngresoGlobal()" class="btn" style="background-color: var(--success); max-width: 440px;">Confirmar Entrada</button>
+                <button onclick="ejecutarIngresoGlobal()" class="btn" style="background-color: var(--success);">Confirmar Entrada</button>
             </div>
 
             <!-- PANEL DE GASTOS CON TABLA RESUMEN AL COSTADO -->
             <div id="panel-gastos-pastel" class="action-panel">
                 <div class="panel-header">
-                    <h3><i class="fa-solid fa-chart-pie" style="color: var(--danger); margin-right: 10px;"></i> Distribución Porcentual y Costos de Gastos</h3>
+                    <h3 style="font-weight: 800; margin:0;"><i class="fa-solid fa-chart-pie" style="color: var(--danger); margin-right: 10px;"></i> Distribución y Costos</h3>
                     <i class="fa-solid fa-xmark" onclick="cerrarPanelGastosPastel()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
                 </div>
                 <div class="chart-layout-box">
-                    <div style="width: 280px; position: relative; height: 280px;">
+                    <div style="width: 200px; position: relative; height: 200px;">
                         <canvas id="pieChart"></canvas>
                     </div>
-                    <!-- Tabla resumen con costos escritos a un lado -->
-                    <div>
-                        <h4 style="margin: 0 0 10px 0; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Resumen de Costos</h4>
+                    <div style="width: 100%;">
+                        <h4 style="margin: 10px 0 5px 0; font-size: 0.8rem; text-transform: uppercase; color: var(--text-muted);">Resumen de Costos</h4>
                         <table class="chart-summary-table">
                             <tbody id="pie-summary-body">
                                 <!-- Se llena dinámicamente mediante JS -->
@@ -308,34 +345,34 @@
                 <div class="category-box" onclick="abrirPanel('vivienda', 'fa-house', '#10b981')"><i class="fa-solid fa-house" style="color: #10b981;"></i><span>Vivienda</span></div>
                 <div class="category-box" onclick="abrirPanel('salud', 'fa-heart-pulse', '#ec4899')"><i class="fa-solid fa-heart-pulse" style="color: #ec4899;"></i><span>Salud</span></div>
                 <div class="category-box" onclick="abrirPanel('educacion', 'fa-graduation-cap', '#8b5cf6')"><i class="fa-solid fa-graduation-cap" style="color: #8b5cf6;"></i><span>Educación</span></div>
-                <!-- Categoría "Otros" descriptiva -->
-                <div class="category-box" onclick="abrirPanel('otros', 'fa-ellipsis-h', '#64748b')"><i class="fa-solid fa-ellipsis-h" style="color: #64748b;"></i><span>Otros (regalos, imprevistos...)</span></div>
+                <div class="category-box" onclick="abrirPanel('otros', 'fa-ellipsis-h', '#64748b')"><i class="fa-solid fa-ellipsis-h" style="color: #64748b;"></i><span>Otros (regalos...)</span></div>
             </div>
 
+            <!-- MODAL DE OPERACIONES ACTUALIZADO CON LOS TEXTOS CORREGIDOS PARA EL PROFESOR -->
             <div id="panel-operacion" class="action-panel">
                 <div class="panel-header">
-                    <h3 id="panel-title" style="font-weight: 800;">Operación</h3>
+                    <h3 id="panel-title" style="font-weight: 800; margin:0;">Operación</h3>
                     <i class="fa-solid fa-xmark" onclick="cerrarPanel()" style="cursor:pointer; font-size: 1.2rem; color: var(--text-muted);"></i>
                 </div>
-                <div style="display: grid; grid-template-columns: 1fr; gap: 24px;">
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 24px;">
-                        <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
-                            <h5 style="margin: 0 0 12px 0; font-size:0.8rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Registrar Gasto</h5>
-                            <div class="form-row">
-                                <div><label>Monto ($)</label><input type="number" id="t-amt" step="0.01" placeholder="0.00"></div>
-                            </div>
-                            <button onclick="ejecutarGasto()" class="btn" style="background-color: var(--danger);">Confirmar Gasto</button>
-                            <div id="alerta-toast" style="padding:10px; background:#fffbeb; border-left:4px solid var(--warning); color:#78350f; border-radius:6px; font-size:0.85rem; margin-top:12px; display:none;"></div>
+                <div style="display: flex; flex-direction: column; gap: 20px;">
+                    <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
+                        <!-- Clase operation-subtitle añadida para cambiar el color a azul y aumentar grosor -->
+                        <h5 class="operation-subtitle">Registrar Gasto</h5>
+                        <div class="form-row">
+                            <div><label>Monto ($)</label><input type="number" id="t-amt" step="0.01" placeholder="0.00"></div>
                         </div>
-                        <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
-                            <h5 style="margin: 0 0 12px 0; font-size:0.8rem; font-weight:800; color:var(--text-muted); text-transform:uppercase;">Asignar Límite Máximo</h5>
-                            <div style="margin-bottom: 16px;">
-                                <label>Nuevo Presupuesto ($)</label>
-                                <input type="number" id="b-amt" step="0.01" placeholder="0.00">
-                                <span style="font-size: 0.7rem; color: var(--text-muted); font-weight: 600; display:block; margin-top:4px;">Mínimo: $1.00</span>
-                            </div>
-                            <button onclick="ejecutarPresupuesto()" class="btn" style="background-color: var(--primary);">Fijar Límite</button>
+                        <button onclick="ejecutarGasto()" class="btn" style="background-color: var(--danger);">Confirmar Gasto</button>
+                        <div id="alerta-toast" style="padding:10px; background:#fffbeb; border-left:4px solid var(--warning); color:#78350f; border-radius:6px; font-size:0.85rem; margin-top:12px; display:none;"></div>
+                    </div>
+                    <div style="background: #f8fafc; padding: 18px; border-radius: 12px; border: 1px solid var(--border);">
+                        <!-- Clase operation-subtitle añadida aquí también -->
+                        <h5 class="operation-subtitle">Asignar Límite Máximo</h5>
+                        <div style="margin-bottom: 16px;">
+                            <label>Nuevo Presupuesto ($)</label>
+                            <input type="number" id="b-amt" step="0.01" placeholder="0.00">
+                            <span style="font-size: 0.75rem; color: var(--text-muted); font-weight: 700; display:block; margin-top:4px;">Mínimo: $1.00</span>
                         </div>
+                        <button onclick="ejecutarPresupuesto()" class="btn" style="background-color: var(--primary);">Fijar Límite</button>
                     </div>
                 </div>
             </div>
@@ -396,7 +433,6 @@
             if(!correoInput || !contrasenaInput) return alert("Por favor, llena los campos básicos.");
 
             if(modoLogin) {
-                // MODO LOGIN
                 try {
                     const res = await fetch(`${API_URL}/auth/login`, {
                         method: 'POST',
@@ -417,13 +453,11 @@
                     alert("Error de conexión con el servidor.");
                 }
             } else {
-                // MODO REGISTRO
                 const nombreInput = document.getElementById('auth-name').value;
                 const cicloInput = parseInt(document.getElementById('auth-ciclo').value);
                 
                 if(!nombreInput) return alert("Por favor introduce tu nombre.");
                 
-                // VALIDACIÓN: Control de rango de ciclo (1-31)
                 if(isNaN(cicloInput) || cicloInput < 1 || cicloInput > 31) {
                     return alert("El día de pago configurado debe estar estrictamente entre el 1 y el 31 de cada mes.");
                 }
@@ -466,21 +500,28 @@
             location.reload();
         }
 
-        // CONTROL DE PANELES EXTRA
         function abrirPanelIngreso() {
             cerrarPanel();
             cerrarPanelGastosPastel();
             document.getElementById('panel-ingreso-global').style.display = "block";
+            document.getElementById('modal-overlay').style.display = "block";
         }
-        function cerrarPanelIngreso() { document.getElementById('panel-ingreso-global').style.display = "none"; }
+        function cerrarPanelIngreso() { 
+            document.getElementById('panel-ingreso-global').style.display = "none"; 
+            document.getElementById('modal-overlay').style.display = "none";
+        }
 
         function abrirPanelGastosPastel() {
             cerrarPanel();
             cerrarPanelIngreso();
             document.getElementById('panel-gastos-pastel').style.display = "block";
+            document.getElementById('modal-overlay').style.display = "block";
             cargarGraficoPastel();
         }
-        function cerrarPanelGastosPastel() { document.getElementById('panel-gastos-pastel').style.display = "none"; }
+        function cerrarPanelGastosPastel() { 
+            document.getElementById('panel-gastos-pastel').style.display = "none"; 
+            document.getElementById('modal-overlay').style.display = "none";
+        }
 
         function abrirPanel(cat, icono, color) {
             cerrarPanelIngreso();
@@ -492,10 +533,20 @@
 
             document.getElementById('panel-title').innerHTML = `<i class="fa-solid ${icono}" style="color: ${color}; margin-right: 10px;"></i> Operar Categoría: <span style="text-transform:uppercase; color:${color}; font-weight:800;">${labelDisplay}</span>`;
             document.getElementById('panel-operacion').style.display = "block";
+            document.getElementById('modal-overlay').style.display = "block";
             document.getElementById('alerta-toast').style.display = "none";
-            document.getElementById('panel-operacion').scrollIntoView({ behavior: 'smooth' });
         }
-        function cerrarPanel() { document.getElementById('panel-operacion').style.display = "none"; categoriaSeleccionada = ""; }
+        function cerrarPanel() { 
+            document.getElementById('panel-operacion').style.display = "none"; 
+            document.getElementById('modal-overlay').style.display = "none";
+            categoriaSeleccionada = ""; 
+        }
+
+        function cerrarTodosLosPaneles() {
+            cerrarPanelIngreso();
+            cerrarPanelGastosPastel();
+            cerrarPanel();
+        }
 
         function initChart(labels = [], dataGasto = [], dataLimite = []) {
             const ctx = document.getElementById('analyticsChart').getContext('2d');
@@ -513,7 +564,6 @@
             });
         }
 
-        // GRÁFICO DE PASTEL CONECTADO AL ENDPOINT + NUEVA TABLA RESUMEN ESCRITA
         async function cargarGraficoPastel() {
             const token = localStorage.getItem("token");
             try {
@@ -532,7 +582,7 @@
                 const totalGastadoPie = valores.reduce((a, b) => a + b, 0);
 
                 if(totalGastadoPie === 0) {
-                    ctx.clearRect(0,0,340,340);
+                    ctx.clearRect(0,0,200,200);
                     summaryBody.innerHTML = `<tr><td style="color:var(--text-muted); text-align:center;">Sin costos que reportar.</td></tr>`;
                     alert("Aún no tienes gastos registrados en este ciclo para graficar.");
                     cerrarPanelGastosPastel();
@@ -646,7 +696,6 @@
             }
         }
 
-        // ACCIÓN DE INGRESO CON CATEGORÍAS INCORPORADAS
         async function ejecutarIngresoGlobal() {
             const token = localStorage.getItem("token");
             const monto = document.getElementById('global-income-amt').value;
@@ -668,7 +717,6 @@
             refrescarDashboard();
         }
 
-        // ACCIÓN DE GASTO POR CATEGORÍA
         async function ejecutarGasto() {
             const token = localStorage.getItem("token");
             const monto = document.getElementById('t-amt').value;
@@ -697,7 +745,6 @@
             const limite = parseFloat(document.getElementById('b-amt').value);
             if(isNaN(limite) || !categoriaSeleccionada) return alert("Ingresa un límite válido");
 
-            // VALIDACIÓN: Mínimo $1.00 por categoría a nivel presupuestario
             if(limite < 1.0) {
                 return alert("El presupuesto mínimo para fijar en cualquier categoría debe ser de $1.00.");
             }
@@ -716,9 +763,9 @@
             const token = localStorage.getItem("token");
             if(!confirm("¿Vaciar tus registros personales?")) return;
             await fetch(`${API_URL}/reiniciar/?token=${token}`, { method: 'POST' });
-            cerrarPanel();
+            cerrarTodosLosPaneles();
             refrescarDashboard();
         }
     </script>
 </body>
-</html> 
+</html>
